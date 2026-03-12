@@ -41,17 +41,11 @@ public class Inspeccion {
     @Column(name = "horometro", nullable = false)
     private Double horometro;
     
-    @NotBlank(message = "El estado de frenos es obligatorio")
+    @NotBlank(message = "El estado es obligatorio")
     @Column(name = "estado_frenos", nullable = false)
     private String estadoFreno;
     
-    @NotBlank(message = "El estado de luces es obligatorio")
-    @Column(name = "estado_luces", nullable = false)
-    private String estadoLuces;
-    
-    @NotBlank(message = "El nivel de aceite es obligatorio")
-    @Column(name = "nivel_aceite", nullable = false)
-    private String nivelAceite;
+   
     
     @Column(name = "observaciones", columnDefinition = "TEXT")
     private String observaciones;

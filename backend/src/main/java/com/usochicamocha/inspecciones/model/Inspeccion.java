@@ -42,7 +42,7 @@ public class Inspeccion {
     private Double horometro;
     
     @NotBlank(message = "El estado es obligatorio")
-    @Column(name = "estado_frenos", nullable = false)
+    @Column(name = "estado", nullable = false)
     private String estadoFreno;
     
    

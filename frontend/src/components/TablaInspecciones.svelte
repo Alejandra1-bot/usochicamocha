@@ -94,6 +94,7 @@
             <th>Horómetro</th>
             <th>Estado</th>
             <th>Observaciones</th>
+            <th>Última</th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -101,8 +102,8 @@
           {#each $inspecciones as inspeccion, index (inspeccion.id)}
             <tr>
               <td class="row-number">{index + 1}</td>
-              <td>{inspeccion.maquina || '-'}</td>
-              <td>{inspeccion.operador || '-'}</td>
+              <td>{inspeccion.numeroMaquina || inspeccion.maquina || '-'}</td>
+              <td>{inspeccion.nombreOperador || inspeccion.operador || '-'}</td>
               <td class="numero">{inspeccion.horometro || '-'}</td>
               <td>
                 <span class="badge {getBadgeClass(inspeccion.estado)}">
@@ -110,6 +111,7 @@
                 </span>
               </td>
               <td class="observaciones">{inspeccion.observaciones || '-'}</td>
+              <td>{inspeccion.ultimaActualizacion || '-'}</td>
               <td>
                 <button class="btn-delete" on:click={() => mostrarConfirmacion(inspeccion.id)} title="Eliminar">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

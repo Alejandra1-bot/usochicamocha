@@ -10,9 +10,9 @@ const API_URL = null;
 // Datos de prueba - son datos ficticios para probar la app
 // No vienen de una base de datos real
 let datosPrueba = [
-  { id: 1, maquina: 'Máquina A1', operador: 'Juan Pérez', horometro: 1500.5, estado: 'Bueno', observaciones: 'Todo en orden' },
-  { id: 2, maquina: 'Máquina B2', operador: 'María López', horometro: 2300.0, estado: 'Regular', observaciones: 'Revisar filtros' },
-  { id: 3, maquina: 'Máquina C3', operador: 'Carlos Gómez', horometro: 800.3, estado: 'Bueno', observaciones: 'Sin observaciones' },
+  { id: 1, numeroMaquina: 'Máquina A1', nombreOperador: 'Juan Pérez', horometro: 1500.5, estado: 'Bueno', observaciones: 'Todo en orden', fechaInspeccion: '2026-03-01', horaInspeccion: '08:30', ultimaActualizacion: '2026-03-01 08:30' },
+  { id: 2, numeroMaquina: 'Máquina B2', nombreOperador: 'María López', horometro: 2300.0, estado: 'Regular', observaciones: 'Revisar filtros', fechaInspeccion: '2026-03-11', horaInspeccion: '09:15', ultimaActualizacion: '2026-03-11 09:15' },
+  { id: 3, numeroMaquina: 'Máquina C3', nombreOperador: 'Carlos Gómez', horometro: 800.3, estado: 'Bueno', observaciones: 'Sin observaciones', fechaInspeccion: '2026-03-12', horaInspeccion: '10:00', ultimaActualizacion: '2026-03-12 10:00' },
 ];
 
 // Función para generar el siguiente ID disponible (sin huecos)
@@ -47,7 +47,7 @@ export async function cargarInspecciones() {
   if (!API_URL) {
     // Simulamos una espera de 0.5 segundos (como si cargara de internet)
     await new Promise(resolve => setTimeout(resolve, 500));
-    // Ponemos los datos de prueba en el store (hacemos copia para no modificar el original)
+    // Ponemos los datos de prueba en el store
     inspecciones.set([...datosPrueba]);
     // Terminamos de cargar
     cargando.set(false);
@@ -89,10 +89,39 @@ export async function crearInspeccion(inspeccion) {
     await new Promise(resolve => setTimeout(resolve, 500));
     // Creamos un nuevo ID usando la función que busca el siguiente disponible
     const nuevoId = generarSiguienteId();
+    // Obtenemos la fecha y hora actual automáticamente
+    const ahora = new Date();
+    const fecha = ahora.toISOString().split('T')[0];
+    const hora = ahora.toTimeString().split(' ')[0].substring(0, 5);
+    // Creamos el nuevo registro con todos los campos
+    const nuevoRegistro = {
+      id: nuevoId,
+      numeroMaquina: inspeccion.maquina,
+      nombreOperador: inspeccion.operador,
+      horometro: inspeccion.horometro,
+      estado: inspeccion.estado,
+      observaciones: inspeccion.observaciones,
+      fechaInspeccion: fecha,
+      horaInspeccion: hora,
+      ultimaActualizacion: fecha + ' ' + hora
+    };
     // Agregamos la nueva inspección a los datos de prueba
-    datosPrueba.push({ ...inspeccion, id: nuevoId });
-    // Actualizamos el store
-    inspecciones.set([...datosPrueba]);
+    datosPrueba.push(nuevoRegistro);
+    // Actualizamos el store con los datos formateados
+    const datosFormateados = datosPrueba.map(d => ({
+      id: d.id,
+      numeroMaquina: d.numeroMaquina,
+      nombreOperador: d.nombreOperador,
+      horometro: d.horometro,
+      estadoFreno: d.estadoFreno,
+      estadoLuces: d.estadoLuces,
+      nivelAceite: d.nivelAceite,
+      observaciones: d.observaciones,
+      fechaInspeccion: d.fechaInspeccion,
+      horaInspeccion: d.horaInspeccion,
+      ultimaActualizacion: d.fechaInspeccion + ' ' + d.horaInspeccion
+    }));
+    inspecciones.set(datosFormateados);
     cargando.set(false);
     return { success: true, message: 'Inspección creada (modo prueba)' };
   }
